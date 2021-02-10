@@ -1,7 +1,7 @@
 import os
 import shutil
 from tkinter import Tk     # from tkinter import Tk for Python 3.x
-from tkinter.filedialog import askopenfilename, askdirectory
+from tkinter.filedialog import askopenfilenames, askdirectory
 import time
 
 
@@ -10,11 +10,11 @@ Tk().withdraw() # we don't want a full GUI, so keep the root window from appeari
 #print(filename)
 
 
-print("Select the file you want to rename")
+print("Select the files you want to rename")
 
 time.sleep(2)
 
-target = askopenfilename()
+target = list(askopenfilenames())
 
 ext = target[-4:]
 
@@ -26,14 +26,17 @@ dest = askdirectory() + "/"
 
 new_name = input("Enter the new name for the file\n")
 
+number = 1
+
 
 print("Proceed with renaming this file?\nHit enter")
 
-input("{}   ------->  {}".format(target, new_name + ext))
+for x in target:
 
+    print("{}   ------->  {}_{}{}".format(x, new_name, number,ext))
+    number += 1
 
-#os.rename(target, "B/{}".format(new_name + ext))
+input()
 
-print(dest + new_name + ext)
-
-shutil.copyfile(target, dest + new_name + ext)
+for x in target:
+    shutil.copyfile(x, dest + new_name + ext)
