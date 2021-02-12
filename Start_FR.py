@@ -16,8 +16,23 @@ target = list(askopenfilenames())
 
 ext = []
 
+ct = 1
+
 for a in target:
-    ext.append(a[-4:])
+    while True:
+        if a[-ct] != ".":
+            ext.append(a[-ct])
+            ct += 1
+        if a[-ct] == ".":
+            ext.append(a[-ct])
+            break
+
+        #ext.append(a[-4:])
+
+
+print(ext)
+
+input()
 
 print("Select where you want to save the renamed file")
 
