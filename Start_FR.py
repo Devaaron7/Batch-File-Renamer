@@ -46,13 +46,11 @@ number = 1
 
 f_dest = []
 
-for x in target:
-    for b in ext:
-        string = dest + new_name + "_" + str(number) + str(b)
+
+for b in ext:
+    string = dest + new_name + "_" + str(number) + str(b)
     f_dest.append(string)
     number += 1
-
-number = 1
 
 for y in range(len(target)):
     shutil.copyfile(target[y], f_dest[y])
