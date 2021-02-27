@@ -48,7 +48,7 @@ for b in ext:
     number += 1
 
 
-# For Loop that will copies every selected file from the target list to the destination with every formatted new name..
+# For Loop that will copy every selected file from the target list to the destination with every formatted new name..
 ## and correct extension
 for y in range(len(target)):
     shutil.copyfile(target[y], f_dest[y])
