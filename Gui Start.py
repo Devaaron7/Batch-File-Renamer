@@ -25,7 +25,8 @@ def load_file_and_save_dir():
     for items in temp_file_list:
         selected_file_list.append(items)
     save_dir = (askdirectory(title="Select Where To Save The Renamed Files") + "/")
-    save_dir_alert.value= "Saving to...\n" + str(save_dir)
+    save_alert_text.enable()
+    dir_text.value = str(save_dir)
     list_box_left.clear()
     index_for_box_left = 0
     for index_for_selected_file_list in range(len(selected_file_list)):
@@ -65,12 +66,8 @@ def combo_box_b_selection(selected_value):
 
 
 def run_program():
-    print(selected_file_list)
-    
-    print(save_dir_alert.value) + str(file_name(selected_file_list))
-    #for y in range(len(selected_file_list)):
-    #    shutil.copyfile(selected_file_list[y], save_dir + file_name(selected_file_list)[y])
-    #    #print(save_dir + file_name(selected_file_list)[y])
+    for index_left_and_right_box in range(len(selected_file_list)):
+        shutil.copyfile(selected_file_list[index_left_and_right_box], dir_text.value + list_box_right.items[index_left_and_right_box] + list_box_left.items[index_left_and_right_box][-4:])
 
 
 num_list = list(range(1, 27))
@@ -93,7 +90,11 @@ static_text_box_b = Text(app, text="Choose A Suffix")
 combo_box_b = Combo(app, options=["1,2,3..", "A,B,C..", "1 of X.."], command=combo_box_b_selection)
 
 #save_button = PushButton(app, text="Select Save Folder", command=save_dir)
-save_dir_alert = Text(app, width = "fill", text="")
+
+save_alert_text = Text(app, width = "fill", text="Saving to...")
+save_alert_text.disable()
+
+dir_text = Text(app, width = "fill", text="")
 
 
 #run_button = PushButton(app, text="Start Program!", command=run_program)
