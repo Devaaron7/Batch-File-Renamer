@@ -1,10 +1,11 @@
-from tkinter.constants import N, WORD
+from tkinter.constants import HORIZONTAL, N, WORD
 from guizero import App, ListBox, MenuBar, TextBox, Text, Combo, PushButton
 import os
 import shutil
 from tkinter import Tk
 from tkinter.filedialog import askopenfilenames, askdirectory
-
+from tkinter.ttk import Progressbar
+import time
 
 def file_name(file_path):
     clean_file_names = []
@@ -21,13 +22,15 @@ def file_name(file_path):
 
 
 def load_file_and_save_dir():
+    if len(selected_file_list) != 0:
+        selected_file_list.clear()
     temp_file_list = (list(askopenfilenames(title="Select Files To Rename")))
     for items in temp_file_list:
         selected_file_list.append(items)
     save_dir = (askdirectory(title="Select Where To Save The Renamed Files") + "/")
     save_alert_text.enable()
-    dir_text.value = str(save_dir)
     list_box_left.clear()
+    dir_text.value = str(save_dir)
     index_for_box_left = 0
     for index_for_selected_file_list in range(len(selected_file_list)):
         list_box_left.insert(index_for_box_left, file_name(selected_file_list)[index_for_selected_file_list])
@@ -66,16 +69,23 @@ def combo_box_b_selection(selected_value):
 
 
 def run_program():
+    bar()
     for index_left_and_right_box in range(len(selected_file_list)):
         shutil.copyfile(selected_file_list[index_left_and_right_box], dir_text.value + list_box_right.items[index_left_and_right_box] + list_box_left.items[index_left_and_right_box][-4:])
 
+
+def bar():
+    # progress['value'] is from ttk
+    if progress['value'] < 100:
+        progress['value'] += 20
+        app.after(1000, bar)
 
 num_list = list(range(1, 27))
 alp_list = list("abcdefghijklmnopqrstuvwxyz".upper())
 selected_file_list = []
 #save_dir = ""
 
-app = App(width = 750)
+app = App(width = 750, title="File Renamer")
 
 list_box_left = ListBox(app, width = 250, items=["a list"], height="fill", align="left")
 list_box_right = ListBox(app, width = 250, items=["b list"], height="fill", align="right")
@@ -109,6 +119,13 @@ menubar = MenuBar(app,
                   ])
 
 
+position_text = Text(app, width = "fill", text="test", align="bottom")
+progress = Progressbar(app.tk, orient = HORIZONTAL,
+              length = 100, mode = 'determinate')
+
+progress.pack()
+
+#app.add_tk_widget(progress)
 
 app.display()
 
