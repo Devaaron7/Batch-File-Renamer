@@ -1,11 +1,13 @@
 from tkinter.constants import HORIZONTAL, N, WORD
-from guizero import App, ListBox, MenuBar, TextBox, Text, Combo, PushButton
+from guizero import App, ListBox, MenuBar, TextBox, Text, Combo, PushButton, Box
 import os
 import shutil
 from tkinter import Tk
 from tkinter.filedialog import askopenfilenames, askdirectory
 from tkinter.ttk import Progressbar
 import time
+import winsound
+
 
 def file_name(file_path):
     clean_file_names = []
@@ -28,7 +30,8 @@ def load_file_and_save_dir():
     for items in temp_file_list:
         selected_file_list.append(items)
     save_dir = (askdirectory(title="Select Where To Save The Renamed Files") + "/")
-    save_alert_text.enable()
+    #save_alert_text.enable()
+    app.title = "File Renamer  -  Saving To - " + str(save_dir)
     list_box_left.clear()
     dir_text.value = str(save_dir)
     index_for_box_left = 0
@@ -68,22 +71,30 @@ def combo_box_b_selection(selected_value):
             counter_for_num_list += 1
 
 
+def pbar(num_of_items):
+    units = 100 / num_of_items
+    if pb['value'] < 100:
+        pb['value'] += units
+        pb.update_idletasks()
+        time.sleep(.1)
+    elif pb['value'] >= 100:
+        pb.stop()
+
+
 def run_program():
-    bar()
+    num_of_files = len(selected_file_list)
+    #num_of_files = 5
     for index_left_and_right_box in range(len(selected_file_list)):
         shutil.copyfile(selected_file_list[index_left_and_right_box], dir_text.value + list_box_right.items[index_left_and_right_box] + list_box_left.items[index_left_and_right_box][-4:])
+        pbar(num_of_files)
+    winsound.PlaySound("notify.wav", winsound.SND_FILENAME)
 
 
-def bar():
-    # progress['value'] is from ttk
-    if progress['value'] < 100:
-        progress['value'] += 20
-        app.after(1000, bar)
 
 num_list = list(range(1, 27))
 alp_list = list("abcdefghijklmnopqrstuvwxyz".upper())
 selected_file_list = []
-#save_dir = ""
+
 
 app = App(width = 750, title="File Renamer")
 
@@ -99,15 +110,11 @@ input_box_a.update_command(constant_updated_type_box_right)
 static_text_box_b = Text(app, text="Choose A Suffix")
 combo_box_b = Combo(app, options=["1,2,3..", "A,B,C..", "1 of X.."], command=combo_box_b_selection)
 
-#save_button = PushButton(app, text="Select Save Folder", command=save_dir)
 
-save_alert_text = Text(app, width = "fill", text="Saving to...")
-save_alert_text.disable()
+#save_alert_text = Text(app, width = "fill", text="Saving to...")
+#save_alert_text.disable()
 
 dir_text = Text(app, width = "fill", text="")
-
-
-#run_button = PushButton(app, text="Start Program!", command=run_program)
 
 run_button = PushButton(app, text="Start Program!", command=run_program)
 
@@ -119,13 +126,11 @@ menubar = MenuBar(app,
                   ])
 
 
-position_text = Text(app, width = "fill", text="test", align="bottom")
-progress = Progressbar(app.tk, orient = HORIZONTAL,
-              length = 100, mode = 'determinate')
+box = Box(app, border=False)
 
-progress.pack()
-
-#app.add_tk_widget(progress)
+# add a progress bar to the box
+pb = Progressbar(box.tk, length=1000)
+box.add_tk_widget(pb)
 
 app.display()
 
