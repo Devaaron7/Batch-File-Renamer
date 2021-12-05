@@ -43,11 +43,44 @@ def constant_updated_type_box_right():
     list_box_right.clear()
     index_for_box_right = 0
     counter_for_alp_list = 0
-    for i in range(len(list_box_left.items)):
-        list_box_right.insert(index_for_box_right, input_box_a.value + "_" + alp_list[counter_for_alp_list])
+    for every_item in range(len(list_box_left.items)):
+        list_box_right.insert(index_for_box_right, input_box_a.value + "_" + formatted_alphabet_ext(len(list_box_left.items), alp_list)[counter_for_alp_list])
         index_for_box_right += 1
         counter_for_alp_list += 1
         
+ 
+def formatted_alphabet_ext(number, a_list):
+    rotations = []
+    current_sum = 0
+    current_sum += number
+
+    while current_sum != 0:
+        if current_sum > 26:
+            rotations.append(26)
+            current_sum -= 26
+            
+        if current_sum <= 26:
+            rotations.append(current_sum)
+            current_sum = 0
+    
+
+    left = -1
+    right = 0
+
+    answer = []
+
+    for x in rotations:
+        if right > 0:
+            for z in range(x):
+                answer.append(a_list[left] + a_list[z])
+        if right <= 0:
+            for y in range(x):
+                answer.append(a_list[y])
+        right += 1
+        left += 1
+    
+    return answer 
+ 
         
 def combo_box_b_selection(selected_value):
     index_for_box_right = 0
@@ -55,17 +88,17 @@ def combo_box_b_selection(selected_value):
     counter_for_alp_list = 0
     list_box_right.clear()
     if selected_value == "1,2,3..":
-        for i in range(len(list_box_left.items)):
+        for every_item in range(len(list_box_left.items)):
             list_box_right.insert(index_for_box_right, input_box_a.value + "_" + str(num_list[counter_for_num_list]))
             index_for_box_right += 1
             counter_for_num_list += 1
     if selected_value == "A,B,C..":
-        for i in range(len(list_box_left.items)):
-            list_box_right.insert(index_for_box_right, input_box_a.value + "_" + alp_list[counter_for_alp_list])
+        for every_item in range(len(list_box_left.items)):
+            list_box_right.insert(index_for_box_right, input_box_a.value + "_" + formatted_alphabet_ext(len(list_box_left.items), alp_list)[counter_for_alp_list])
             index_for_box_right += 1
             counter_for_alp_list += 1
     if selected_value == "1 of X..":
-        for i in range(len(list_box_left.items)):
+        for every_item in range(len(list_box_left.items)):
             list_box_right.insert(index_for_box_right, input_box_a.value + "_" + str(num_list[counter_for_num_list]) + "_of_" + str(len(list_box_left.items)))
             index_for_box_right += 1
             counter_for_num_list += 1
@@ -91,7 +124,7 @@ def run_program():
 
 
 
-num_list = list(range(1, 27))
+num_list = list(range(1, 500))
 alp_list = list("abcdefghijklmnopqrstuvwxyz".upper())
 selected_file_list = []
 
@@ -111,9 +144,6 @@ static_text_box_b = Text(app, text="Choose A Suffix")
 combo_box_b = Combo(app, options=["1,2,3..", "A,B,C..", "1 of X.."], command=combo_box_b_selection)
 
 
-#save_alert_text = Text(app, width = "fill", text="Saving to...")
-#save_alert_text.disable()
-
 dir_text = Text(app, width = "fill", text="")
 
 run_button = PushButton(app, text="Start Program!", command=run_program)
@@ -128,7 +158,6 @@ menubar = MenuBar(app,
 
 box = Box(app, border=False)
 
-# add a progress bar to the box
 pb = Progressbar(box.tk, length=1000)
 box.add_tk_widget(pb)
 
