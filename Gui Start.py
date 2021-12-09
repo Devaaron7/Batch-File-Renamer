@@ -33,7 +33,8 @@ def load_file_and_save_dir():
     #save_alert_text.enable()
     app.title = "File Renamer  -  Saving To - " + str(save_dir)
     list_box_left.clear()
-    dir_text.value = str(save_dir)
+    #dir_text.value = str(save_dir)
+    save_path.append(str(save_dir))
     index_for_box_left = 0
     for index_for_selected_file_list in range(len(selected_file_list)):
         list_box_left.insert(index_for_box_left, file_name(selected_file_list)[index_for_selected_file_list])
@@ -118,7 +119,9 @@ def run_program():
     num_of_files = len(selected_file_list)
     #num_of_files = 5
     for index_left_and_right_box in range(len(selected_file_list)):
-        shutil.copyfile(selected_file_list[index_left_and_right_box], dir_text.value + list_box_right.items[index_left_and_right_box] + list_box_left.items[index_left_and_right_box][-4:])
+        #shutil.copyfile(selected_file_list[index_left_and_right_box], dir_text.value + list_box_right.items[index_left_and_right_box] + list_box_left.items[index_left_and_right_box][-4:])
+        shutil.copyfile(selected_file_list[index_left_and_right_box], save_path[0] + list_box_right.items[index_left_and_right_box] + list_box_left.items[index_left_and_right_box][-4:])
+
         pbar(num_of_files)
     winsound.PlaySound("notify.wav", winsound.SND_FILENAME)
 
@@ -127,16 +130,16 @@ def run_program():
 num_list = list(range(1, 500))
 alp_list = list("abcdefghijklmnopqrstuvwxyz".upper())
 selected_file_list = []
-
+save_path = []
 
 app = App(width = 750, title="File Renamer")
 
-list_box_left = ListBox(app, width = 250, items=["a list"], height="fill", align="left")
-list_box_right = ListBox(app, width = 250, items=["b list"], height="fill", align="right")
+list_box_left = ListBox(app, width = 250, items=[""], height="fill", align="left")
+list_box_right = ListBox(app, width = 250, items=[""], height="fill", align="right")
 
 
 static_text_box_a = Text(app, text="Enter Name For New Files")
-input_box_a = TextBox(app, command=None)
+input_box_a = TextBox(app, width=25, text="New_Name_", command=None)
 input_box_a.update_command(constant_updated_type_box_right)
 
 
@@ -144,7 +147,7 @@ static_text_box_b = Text(app, text="Choose A Suffix")
 combo_box_b = Combo(app, options=["1,2,3..", "A,B,C..", "1 of X.."], command=combo_box_b_selection)
 
 
-dir_text = Text(app, width = "fill", text="")
+#dir_text = Text(app, width = "fill", text="")
 
 run_button = PushButton(app, text="Start Program!", command=run_program)
 
@@ -156,7 +159,7 @@ menubar = MenuBar(app,
                   ])
 
 
-box = Box(app, border=False)
+box = Box(app, border=True, align="bottom")
 
 pb = Progressbar(box.tk, length=1000)
 box.add_tk_widget(pb)
