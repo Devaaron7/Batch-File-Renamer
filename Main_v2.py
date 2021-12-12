@@ -30,10 +30,8 @@ def load_file_and_save_dir():
     for items in temp_file_list:
         selected_file_list.append(items)
     save_dir = (askdirectory(title="Select Where To Save The Renamed Files") + "/")
-    #save_alert_text.enable()
     app.title = "File Renamer  -  Saving To - " + str(save_dir)
     list_box_left.clear()
-    #dir_text.value = str(save_dir)
     save_path.append(str(save_dir))
     index_for_box_left = 0
     for index_for_selected_file_list in range(len(selected_file_list)):
@@ -117,9 +115,7 @@ def pbar(num_of_items):
 
 def run_program():
     num_of_files = len(selected_file_list)
-    #num_of_files = 5
     for index_left_and_right_box in range(len(selected_file_list)):
-        #shutil.copyfile(selected_file_list[index_left_and_right_box], dir_text.value + list_box_right.items[index_left_and_right_box] + list_box_left.items[index_left_and_right_box][-4:])
         shutil.copyfile(selected_file_list[index_left_and_right_box], save_path[0] + list_box_right.items[index_left_and_right_box] + list_box_left.items[index_left_and_right_box][-4:])
 
         pbar(num_of_files)
@@ -146,8 +142,6 @@ input_box_a.update_command(constant_updated_type_box_right)
 static_text_box_b = Text(app, text="Choose A Suffix")
 combo_box_b = Combo(app, options=["1,2,3..", "A,B,C..", "1 of X.."], command=combo_box_b_selection)
 
-
-#dir_text = Text(app, width = "fill", text="")
 
 run_button = PushButton(app, text="Start Program!", command=run_program)
 
